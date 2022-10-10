@@ -2,7 +2,7 @@ import { appState } from '../AppState.js'
 import { audience, clientId, domain } from '../env.js'
 import { accountService } from './AccountService.js'
 import { server } from './AxiosService.js'
-import { socketService } from './SocketService.js'
+// import { socketService } from './SocketService.js'
 
 // @ts-ignore
 // eslint-disable-next-line no-undef
@@ -25,7 +25,7 @@ AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async () => {
   server.interceptors.request.use(refreshAuthToken)
   appState.user = AuthService.user
   await accountService.getAccount()
-  socketService.authenticate(AuthService.bearer)
+  // socketService.authenticate(AuthService.bearer)
 })
 
 async function refreshAuthToken(config) {
@@ -35,10 +35,10 @@ async function refreshAuthToken(config) {
   const needsRefresh = expires < Date.now() + (1000 * 60 * 60 * 12)
   if (expired) {
     await AuthService.loginWithPopup()
-    socketService.authenticate(AuthService.bearer)
+    // socketService.authenticate(AuthService.bearer)
   } else if (needsRefresh) {
     await AuthService.getTokenSilently()
-    socketService.authenticate(AuthService.bearer)
+    // socketService.authenticate(AuthService.bearer)
   }
   server.defaults.headers.authorization = AuthService.bearer
   return config

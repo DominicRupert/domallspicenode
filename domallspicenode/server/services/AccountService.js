@@ -43,6 +43,13 @@ function sanitizeBody(body) {
 }
 
 class AccountService {
+  async editAccount(body, userInfo) {
+    let original = await this.getAccount(userInfo)
+    original.name = body.name || original.name
+    original.picture = body.picture || original.picture
+    await original.update()
+  }
+
   /**
    * Returns a user account from the Auth0 user object
    *
@@ -73,6 +80,45 @@ class AccountService {
       { runValidators: true, setDefaultsOnInsert: true, new: true }
     )
     return account
+  }
+
+
+
+  // NOTE good example of nested populate here
+  async getFavorites(id) {
+    let favorites = await dbContext.Favorite.find({ accountId: id })
+      .populate({
+        path: 'recipe',
+        populate: {
+          path: 'creator'
+        }
+      })
+    return favorites
+  }
+
+
+  async getUserRecipes(id) {
+    let recipes = await dbContext.Recipe.find({ creatorId: id })
+      .populate('creator')
+    return recipes
+  }
+
+
+
+
+  async getOtherUserAccount(id) {
+    let account = await dbContext.Account.findById(id)
+    return account
+  }
+
+  async getOtherUserRecipes(id) {
+    let recipes = await dbContext.Recipe.find({ creatorId: id })
+    return recipes
+  }
+
+  async getOtherUserReviews(id) {
+    let reviews = await dbContext.Review.find({ creatorId: id }).populate('creator').populate('recipe')
+    return reviews
   }
 }
 export const accountService = new AccountService()

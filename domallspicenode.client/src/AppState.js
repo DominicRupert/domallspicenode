@@ -4,5 +4,31 @@ import { reactive } from 'vue'
 export const AppState = reactive({
   user: {},
   /**@type {import('./models/Account.js').Account} */
-  account: {}
+  account: {},
+
+  // Home Page
+  recipes: [],
+  recentFavorites: [],
+  categories: {},
+
+  // Recipe Page
+  activeRecipe: {},
+  activeRecipeReviews: [],
+  activeRecipeRating: 0,
+  activeRecipeIngredients: [],
+  activeRecipeSteps: [],
+  activeRecipeAccountRecipes: [],
+
+  // Profile Page
+  activeProfile: {},
+  activeProfileRecipes: [],
+  activeProfileReviews: {},
+
+
+  // Create Recipe Page
+  creationStep: 1,
+  createdRecipe: {},
+  nextStepPosition: 1,
+  stepsToCreate: [],
+  ingredientsToCreate: []
 })

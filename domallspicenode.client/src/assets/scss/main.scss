@@ -4,16 +4,20 @@
 @import "./utilities.scss";
 @import "./loaders.scss";
 
-body{
-  overscroll-behavior: none;
-}
-
 #app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-color: $body-bg;
+  font-family: 'Radio Canada', sans-serif;
+
 }
+
+.clickable:hover {
+  cursor: pointer;
+}
+
+
 
 main {
   flex-grow: 1;
@@ -23,18 +27,6 @@ a {
   text-decoration: none;
 }
 
-input,
-textarea,
-select {
-  &:not(:placeholder-shown) {
-    &:valid {
-      border: 1px solid $success;
-    }
-    &:invalid {
-      border: 1px solid $danger;
-    }
-  }
-}
 
 form:invalid button[type="submit"] {
   filter: grayscale(1);

@@ -6,22 +6,21 @@ export default class Pop {
  *
  * @param {string} title The title text.
  * @param {string} text The body text.
+ * @param {string} icon 'success', 'error', 'info', 'warning', or 'question'.
  * @param {string} confirmButtonText The text of your confirm button.
- * @param {'success' | 'error' | 'info' | 'warning' | 'question'} icon Pop icon
- * 
+ * -----------------------------------
  * {@link https://sweetalert2.github.io/#configuration|Check out Sweet Alerts}
  */
-  static async confirm(title = 'Are you sure?', text = "You won't be able to revert this!", confirmButtonText = 'Yes', icon = 'warning') {
+  static async confirm(title = 'Are you sure?', text = "You won't be able to revert this!", icon = 'warning', confirmButtonText = 'Yes, delete it!') {
     try {
       const res = await Swal.fire({
-        title,
-        text,
-        icon,
-        confirmButtonText,
+        title: title,
+        text: text,
+        icon: icon,
         showCancelButton: true,
-        reverseButtons: true,
-        confirmButtonColor: 'var(--bs-primary)',
-        cancelButtonColor: 'var(--bs-secondary)'
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: confirmButtonText
       })
       if (res.isConfirmed) {
         return true
@@ -35,19 +34,19 @@ export default class Pop {
   /**
  *
  * @param {string} title The title text
- * @param {'success' | 'error' | 'info' | 'warning' | 'question'} icon
- * @param {'top' | 'top-start' | 'top-end' | 'center' | 'center-start' | 'center-end' | 'bottom' | 'bottom-start' | 'bottom-end'} position
+ * @param {string} display 'success', 'error', 'info', 'warning', or 'question'.
+ * @param {string} position 'top', 'top-start', 'top-end', 'center', 'center-start', 'center-end', 'bottom', 'bottom-start', or 'bottom-end'.
  * @param {number} timer Time in milliseconds.
  * @param {boolean} progressBar Show progress bar or not respectively.
  * -----------------------------------
  * {@link https://sweetalert2.github.io/#configuration|Check out Sweet Alerts}
  */
-  static toast(title = 'Warning!', icon = 'warning', position = 'top-end', timer = 3000, progressBar = true) {
+  static toast(title = 'Warning!', display = 'warning', position = 'top-end', timer = 3000, progressBar = true) {
     Swal.fire({
-      title,
-      icon,
-      position,
-      timer,
+      title: title,
+      icon: display,
+      position: position,
+      timer: timer,
       timerProgressBar: progressBar,
       toast: true,
       showConfirmButton: false
@@ -67,7 +66,7 @@ export default class Pop {
   }
 
   /**
-   * @param { string } message The message to display. If not provided, will display a generic message.
+   * @param { String } message The message to display. If not provided, will display a generic message.
    */
   static success(message = 'Success!') {
     this.toast(message, 'success')

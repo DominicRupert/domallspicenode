@@ -1,36 +1,120 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 bg-white rounded elevation-3">
-      <img src="https://bcw.blob.core.windows.net/public/img/8600856373152463" alt="CodeWorks Logo" class="rounded-circle">
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
+  <!-- <div class="hero-img">
+  </div> -->
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="bg-light rounded p-2 mt-md-5 mt-3">
+          <h4 class="text-center text-primary">Our Recent Favorites</h4>
+          <SmallRecipeCard v-for="r in recentFavorites" :recipe="r" :key="r.id"></SmallRecipeCard>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="bg-light p-2 mt-md-5 mt-3 rounded">
+          <h4 class="text-center text-primary">Our Newest Recipe</h4>
+          <img :src="newestRecipe?.picture" class="newest-recipe-img" alt="">
+          <div>
+            <h4 class="text-center mt-2 text-primary fw-bold">{{ newestRecipe?.title }}</h4>
+          </div>
+          <p class="mt-3">{{ newestRecipe?.subtitle }}</p>
+          <div class="d-flex mt-3 align-items-center justify-content-between">
+            <div>
+              <button class="btn btn-primary" @click="navToRecipe(newestRecipe.id)">Learn More</button>
+            </div>
+            <div class="d-flex flex-column">
+              <p class="m-0 text-muted text-center">Recipe Creator</p>
+              <div class="d-flex align-items-center bg-primary rounded text-light p-2 pointer"
+                @click="navToProfile(newestRecipe.creator.id)">
+                <img class="creator-img" :src="newestRecipe?.creator.picture" alt="">
+                <p class="m-0 ms-2">{{ newestRecipe?.creator.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="p-2 mt-md-5 mt-3 bg-light rounded">
+          <h4 class="text-center text-primary">Explore Categories</h4>
+          <p v-for="(value, key, index) in categories" class="category-text">{{ key }} ({{ value }})</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row mt-5">
+      <div class="col-md-4" v-for="r in recipes">
+        <MediumRecipeCard :recipe=r></MediumRecipeCard>
+      </div>
     </div>
   </div>
+
+
 </template>
 
 <script>
+import { computed } from '@vue/reactivity';
+import { onMounted } from 'vue';
+import { AppState } from '../AppState';
+import SmallRecipeCard from '../components/CardComponents/SmallRecipeCard.vue';
+import { categoriesService } from '../services/CategoriesService';
+import { recipesService } from '../services/RecipesService'
+import MediumRecipeCard from '../components/CardComponents/MediumRecipeCard.vue';
+import { router } from '../router';
+import { useRouter } from "vue-router";
+
 export default {
-  name: 'Home'
+  setup() {
+    let router = useRouter()
+    onMounted(async () => {
+      await recipesService.getAllRecipes()
+      categoriesService.getAllCategories()
+      recipesService.randomFiveRecipes()
+    })
+    return {
+      recipes: computed(() => AppState.recipes),
+      recentFavorites: computed(() => AppState.recentFavorites),
+      newestRecipe: computed(() => AppState.recipes[AppState.recipes.length - 1]),
+      categories: computed(() => AppState.categories),
+      navToProfile(id) {
+        router.push({ name: 'Profile', params: { id } })
+      },
+      navToRecipe(id) {
+        router.push({ name: "Recipe", params: { id } })
+      }
+    };
+  },
+  components: { SmallRecipeCard, MediumRecipeCard }
 }
 </script>
 
 <style scoped lang="scss">
-.home{
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
-  .home-card{
-    width: 50vw;
-    > img{
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
+@import "../assets/scss/variables";
+
+
+.pointer:hover {
+  cursor: pointer;
+}
+
+.newest-recipe-img {
+  height: 50vh;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.creator-img {
+  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
+  object-fit: cover;
+  transition: 200ms;
+}
+
+.category-text:hover {
+  cursor: pointer;
+  color: $primary;
+  transition: 200ms;
 }
 </style>

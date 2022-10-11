@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-md-3">
         <div class="bg-light rounded p-2 mt-md-5 mt-3">
-          <h4 class="text-center text-primary">Our Recent Favorites</h4>
+          <!-- <h4 class="text-center text-primary">Our Recent Favorites</h4> -->
           <SmallRecipeCard v-for="r in recentFavorites" :recipe="r" :key="r.id"></SmallRecipeCard>
         </div>
       </div>
@@ -85,7 +85,7 @@ export default {
       }
     };
   },
-  components: { SmallRecipeCard, MediumRecipeCard }
+  // components: { SmallRecipeCard, MediumRecipeCard }
 }
 </script>
 
